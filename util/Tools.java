@@ -35,7 +35,8 @@ public class Tools {
 		}  
 		return null;
 	}
-	public static void writeTables(Tables tb){
+	public static void writeTables(Tables tb)
+	{
 		try {
 			FileOutputStream fos = new FileOutputStream(name);  
 			ObjectOutputStream oos = new ObjectOutputStream(fos);  
@@ -52,7 +53,8 @@ public class Tools {
 	}
     
 	
-	public static void writeData(Data tb,String tname){
+	public static void writeData(Data tb,String tname)
+	{
 		try {
 			FileOutputStream fos = new FileOutputStream(tname);  
 			ObjectOutputStream oos = new ObjectOutputStream(fos);  
