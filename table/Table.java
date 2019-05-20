@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Table implements Serializable{
+public class Table implements Serializable
+{
 	 
 	private static final long serialVersionUID = 1L;
 
