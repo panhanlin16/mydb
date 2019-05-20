@@ -26,13 +26,13 @@ public class DB {
 	}
 
 	public static void main(String[] args) throws MyException {
-		System.out.println("#########¿ªÊ¼#########");
+		System.out.println("#########å¼€å§‹#########");
 		while(true) {
 	    String h = readComm().trim();
 	
 	    if(h.equals("exit"))
 	    {
-	    	System.out.println("ÍË³ö³É¹¦");
+	    	System.out.println("é€€å‡ºæˆåŠŸ");
 	    	break;
 	    }
 		Checker ch = new Checker(h);
@@ -47,19 +47,19 @@ public class DB {
 					    Tables tbs = new Tables();
 					    tbs.getTables().add(tb);
 						Tools.writeTables(tbs);
-						System.out.println("´´½¨³É¹¦£¡");
+						System.out.println("åˆ›å»ºæˆåŠŸï¼");
 					}  else {
 						
 					 }
 				} else {
 					 if(t.getTables().contains(tb)) {
-						 throw new MyException("±íÒÑ¾­´æÔÚ£¡´´½¨Ê§°Ü");
+						 throw new MyException("è¡¨å·²ç»å­˜åœ¨ï¼åˆ›å»ºå¤±è´¥");
 					 }
 					 else {
 						 t.getTables().add(tb);
 					     Tools.writeTables(t);
 					     
-					     System.out.println("±í´´½¨³É¹¦£¡");
+					     System.out.println("è¡¨åˆ›å»ºæˆåŠŸï¼");
 					 }
 					
 				}
@@ -72,18 +72,18 @@ public class DB {
 			}else if(ch.getComm().charAt(0)=='u'||ch.getComm().charAt(0)=='U') {
 				ch.checkUpdate();
 			}else if(ch.getComm().equals("exit")) {
-				System.out.println("ÍË³ö³É¹¦");
+				System.out.println("é€€å‡ºæˆåŠŸ");
 			}
 				
 			else {
-				throw new MyException("Óï·¨´íÎó£¡");
+				throw new MyException("è¯­æ³•é”™è¯¯ï¼");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 	}
-		System.out.println("Ğ»Ğ»Ê¹ÓÃ£¡");
+		System.out.println("è°¢è°¢ä½¿ç”¨");
 	}
 	 
 }
