@@ -6,7 +6,8 @@ import java.io.ObjectOutputStream;
 
 import com.ht.entity.Table;
 
-public class Operator {
+public class Operator 
+{
 	public void createTable(Table tb) throws IOException{
 		String file = tb.getName()+".tb";
 		FileOutputStream fos = new FileOutputStream(file);  
