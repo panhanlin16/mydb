@@ -32,7 +32,7 @@ public class Checker {
 				if(top>=0) {
 					top--;
 				} else {
-					throw new MyException("À¨ºÅ²»Æ¥Åä£¡£¡"); 
+					throw new MyException("æ‹¬å·ä¸åŒ¹é…ï¼ï¼"); 
 				}
 			}
 		}
@@ -43,7 +43,7 @@ public class Checker {
 		Table table  = new Table();
 
 		if(!words[1].toUpperCase().equals("TABLE")){
-			throw new MyException("ÎŞ·¨½âÎö ´´½¨±íÓï¾ä£¡");
+			throw new MyException("æ— æ³•è§£æ åˆ›å»ºè¡¨è¯­å¥ï¼");
 		}
 		String na = "";
 		for(int i=13;i<comm.length();i++) {
@@ -53,7 +53,7 @@ public class Checker {
 
 		if(!na.trim().matches("[a-zA-Z0-9_]+")) {
 
-			throw new MyException(" ±íÃû´´½¨ÎŞĞ§£¬Ö»ÄÜÎª´óĞ¡Ğ´×ÖÄ¸ÏÂ»®Ïß£¡");
+			throw new MyException(" è¡¨ååˆ›å»ºæ— æ•ˆï¼Œåªèƒ½ä¸ºå¤§å°å†™å­—æ¯ä¸‹åˆ’çº¿ï¼");
 		}
 		
 		table.setName(na.trim());
@@ -65,18 +65,18 @@ public class Checker {
 			}
 		}
 		if(st.equals("")){
-			throw new MyException("À¨ºÅ²»Æ¥Åä£¡");
+			throw new MyException("æ‹¬å·ä¸åŒ¹é…ï¼");
 		}
 		String[] w = st.split(",");
 		for(int i=0;i<w.length;i++) {
 			String name = Tools.delSpaceEnter(w[i]).trim();
 			String[] c = name.split("\\s");
 			if(c.length!=2) {
-				throw new MyException("ÊôĞÔ½âÎö´íÎó£¡");
+				throw new MyException("å±æ€§è§£æé”™è¯¯ï¼");
 			}else {
 				if(c[0].trim().matches("[a-zA-Z0-9_]+")==false||
 						(c[0].charAt(0)>='0'&&c[0].charAt(0)<='9')){
-					throw new MyException("ÊôĞÔÃû¶¨Òå²»ºÏ·¨");
+					throw new MyException("å±æ€§åå®šä¹‰ä¸åˆæ³•");
 				} else {
 					if(c[1].trim().matches("int")) {
 						table.getMp().put(c[0].trim(),"int");
@@ -85,12 +85,12 @@ public class Checker {
 					} else if(c[1].trim().matches("long")) {
 						table.getMp().put(c[0].trim(),"long");
 					} else if(c[1].trim().matches("float")) {
-						table.getMp().put(c[0].trim(),"double");}
+						table.getMp().put(c[0].trim(),"float");}
 					
 					else if(c[1].trim().matches("string\\([0-9]+\\)")){
 						table.getMp().put(c[0].trim(), c[1].trim());
 					} else {
-						throw new MyException("ÊôĞÔÀàĞÍ²»ºÏ·¨£¡");
+						throw new MyException("å±æ€§ç±»å‹ä¸åˆæ³•ï¼");
 					}
 				}
 			}
@@ -117,7 +117,7 @@ public class Checker {
 			Table t = new Table();
 			System.out.println(name);
 			if(!Tools.readTables().getTables().contains(t)) {
-				throw new MyException("±íÃû²»´æÔÚ£¬Çë¼ì²é£¡");
+				throw new MyException("è¡¨åä¸å­˜åœ¨ï¼Œè¯·æ£€æŸ¥ï¼");
 			}
 
 			Tables tbs = Tools.readTables();
@@ -148,7 +148,7 @@ public class Checker {
 			}
 			val=val.trim();
 			if(val.toLowerCase().equals("values")==false){
-				throw new MyException("½âÎö´íÎó£¡");
+				throw new MyException("è§£æé”™è¯¯ï¼");
 			}
 			String num="";
 			for(int i=index;i<comm.length();i++) {
@@ -160,35 +160,35 @@ public class Checker {
 			String[] vals=num.split(",");
 			List<Object> va = new ArrayList<Object>();
 			if(cs.length!=vals.length) {
-				throw new MyException("²åÈëµÄÖµ²»¶ÔÓ¦Çë¼ì²é£¡");
+				throw new MyException("æ’å…¥çš„å€¼ä¸å¯¹åº”è¯·æ£€æŸ¥ï¼");
 			}
 			for(int i=0;i<cs.length;i++) {
 				String k=table.getMp().get(cs[i].trim());
 				if(null==k){
-					throw new MyException("ÊôĞÔ²»´æÔÚ£¬Çë¼ì²é£¡");
+					throw new MyException("å±æ€§ä¸å­˜åœ¨ï¼Œè¯·æ£€æŸ¥ï¼");
 				} else {
 					if(k.equals("int")) {
 						if(vals[i].trim().matches("[0-9]+")==false) {
-							throw new MyException("²åÈëµÄÖµÓë±í¶¨ÒåµÄÀàĞÍ²»Ò»ÖÂ£¡²åÈëÊ§°Ü");
+							throw new MyException("æ’å…¥çš„å€¼ä¸è¡¨å®šä¹‰çš„ç±»å‹ä¸ä¸€è‡´ï¼æ’å…¥å¤±è´¥");
 						}else {
 							va.add(Integer.valueOf(vals[i]));
 						}
 					}else if(k.equals("long")) {
 						if(vals[i].trim().matches("[0-9]+")==false) {
-							throw new MyException("²åÈëµÄÖµÓë±í¶¨ÒåµÄÀàĞÍ²»Ò»ÖÂ£¡²åÈëÊ§°Ü");
+							throw new MyException("æ’å…¥çš„å€¼ä¸è¡¨å®šä¹‰çš„ç±»å‹ä¸ä¸€è‡´ï¼æ’å…¥å¤±è´¥");
 						}else {
 							va.add(Long.valueOf(vals[i]));
 						}
 					}else if(k.equals("float")) {
 						if(vals[i].trim().matches("[a-zA-Z_]+")==true) {
-							throw new MyException("²åÈëµÄÖµÓë±í¶¨ÒåµÄÀàĞÍ²»Ò»ÖÂ£¡²åÈëÊ§°Ü");
+							throw new MyException("æ’å…¥çš„å€¼ä¸è¡¨å®šä¹‰çš„ç±»å‹ä¸ä¸€è‡´ï¼æ’å…¥å¤±è´¥");
 						}else {
 							va.add(Float.valueOf(vals[i]));
 						}
 					}
 					else if(k.equals("double")) {
 						if(vals[i].trim().matches("[a-zA-Z_]+")==true) {
-							throw new MyException("²åÈëµÄÖµÓë±í¶¨ÒåµÄÀàĞÍ²»Ò»ÖÂ£¡²åÈëÊ§°Ü");
+							throw new MyException("æ’å…¥çš„å€¼ä¸è¡¨å®šä¹‰çš„ç±»å‹ä¸ä¸€è‡´ï¼æ’å…¥å¤±è´¥");
 						}else {
 							va.add(Double.valueOf(vals[i]));
 						}
@@ -196,7 +196,7 @@ public class Checker {
 					else {
 						vals[i]=vals[i].trim();
 						if(vals[i].charAt(0)!='\''||vals[i].charAt(vals[i].length()-1)!='\'') {
-							throw new MyException("²åÈëµÄÖµÓë±í¶¨ÒåµÄÀàĞÍ²»Ò»ÖÂ£¡²åÈëÊ§°Ü");
+							throw new MyException("æ’å…¥çš„å€¼ä¸è¡¨å®šä¹‰çš„ç±»å‹ä¸ä¸€è‡´ï¼æ’å…¥å¤±è´¥");
 						}
 						va.add(vals[i]); 
 					}
@@ -237,41 +237,55 @@ public class Checker {
 				}
 			}
 
-			//			for (Object object : va) {
-			//				dt.getData().add(object);
-			//			}
+		
 			Tools.writeData(dt, name+".tb");
-			System.out.println("Êı¾İ²åÈë³É¹¦£¡");
+			System.out.println("æ•°æ®æ’å…¥æˆåŠŸï¼");
 		} else {
-			throw new MyException("ÎŞ·¨½âÎö²åÈëÃüÁî£¡");
+			throw new MyException("æ— æ³•è§£ææ’å…¥å‘½ä»¤ï¼");
 		}
 		return true;
 	}
 	public boolean checkDel() throws MyException{
 		//delete from name where cnamm=value;
 		int num=0;
-		String [] w = comm.split("\\s");
-		if(w[0].trim().toLowerCase().equals("delete")==false) {
-			throw new MyException("½âÎöÓï¾ä´íÎó!É¾³ıÊ§°Ü£¡");
-		} else if(w[1].trim().toLowerCase().equals("from")==false){
-			throw new MyException("fromÈ±Ê§£¡É¾³ıÊ§°Ü£¡");
-		} 
 		Tables tbs = Tools.readTables();
-		if(w.length<3) {
-			throw new MyException("²ÎÊı²»×ã£¡É¾³ıÊ§°Ü£¡");
-		} else if(w.length==3){
+		String [] w = comm.split("\\s");
+		if(w[0].trim().toLowerCase().equals("drop")==true||w[1].trim().toLowerCase().equals("table")==true||w.length==3)
+		{
 			if(tbs.getTables().contains(new Table(w[2].trim()))==false) {
-				throw new MyException("±íÃû´íÎó£¡Çë¼ì²é£¡~");
-			} else {
-				File file = new File(w[2].trim()+".tb");  
-				if(file.exists()){
-					file.delete();
-					System.out.println("É¾³ı³É¹¦£¡");
-				}
+				throw new MyException("è¡¨åé”™è¯¯ï¼è¯·æ£€æŸ¥ï¼~");
 			}
-		} else {
+			Table t = null;
+			File file = new File(w[2].trim()+".tb");
+			if (file.exists()) {
+				file.delete();
+				System.out.println("æ–‡ä»¶å·²ç»è¢«æˆåŠŸåˆ é™¤");
+			}
+		}
+		if(w[0].trim().toLowerCase().equals("delete")==false) {
+			throw new MyException("è§£æè¯­å¥é”™è¯¯!åˆ é™¤å¤±è´¥ï¼");
+		} else if(w[1].trim().toLowerCase().equals("from")==false){
+			throw new MyException("fromç¼ºå¤±ï¼åˆ é™¤å¤±è´¥ï¼");
+		} 
+		
+		if(w.length<3) {
+			throw new MyException("å‚æ•°ä¸è¶³ï¼åˆ é™¤å¤±è´¥ï¼");
+		} else if(w.length==3)
+		{
 			if(tbs.getTables().contains(new Table(w[2].trim()))==false) {
-				throw new MyException("±íÃû´íÎó£¡Çë¼ì²é£¡~");
+				throw new MyException("è¡¨åé”™è¯¯ï¼è¯·æ£€æŸ¥ï¼~");
+			}
+			Table t = null;
+			File file = new File(w[2].trim()+".tb");
+			if (file.exists()) {
+				file.delete();
+				System.out.println("æ–‡ä»¶å·²ç»è¢«æˆåŠŸåˆ é™¤");
+			}
+			
+			
+		}else {
+			if(tbs.getTables().contains(new Table(w[2].trim()))==false) {
+				throw new MyException("è¡¨åé”™è¯¯ï¼è¯·æ£€æŸ¥ï¼~");
 			}
 			Table t = null;
 			for (Table tb : tbs.getTables()) {
@@ -282,7 +296,7 @@ public class Checker {
 			}
 
 			if(w[3].trim().equals("where")==false) {
-				throw new MyException("½âÎö´íÎó£¡");
+				throw new MyException("è§£æé”™è¯¯ï¼");
 			}
 			String last = this.comm.split("where")[1].trim();
 			String [] condition = last.split(",");
@@ -291,16 +305,16 @@ public class Checker {
 			for(int i=0;i<condition.length;i++) {
 				String [] kv = condition[i].trim().split("=");
 				if(kv.length!=2) {
-					throw new MyException("whereÌõ¼ş½âÎö´íÎó£¬Çë¼ì²é£¡");
+					throw new MyException("whereæ¡ä»¶è§£æé”™è¯¯ï¼Œè¯·æ£€æŸ¥ï¼");
 				}
 				kv[0]= kv[0].trim();
 				kv[1]= kv[1].trim();
 				if(t.getMp().get(kv[0])==null) {
-					throw new MyException("ÁĞÃû²»´æÔÚ£¡");
+					throw new MyException("åˆ—åä¸å­˜åœ¨ï¼");
 				} 
 				if(t.getMp().get(kv[0]).equals("int")) {
 					if(kv[1].matches("[0-9]+")==false) {
-						throw new MyException("Óë¶¨ÒåÁĞµÄÊôĞÔ²»·û£¬Çë¼ì²é£¡");
+						throw new MyException("ä¸å®šä¹‰åˆ—çš„å±æ€§ä¸ç¬¦ï¼Œè¯·æ£€æŸ¥ï¼");
 					} else {
 						///code
 						Set s = t.getMp().keySet();
@@ -321,7 +335,7 @@ public class Checker {
 					}
 				} else	if(t.getMp().get(kv[0]).equals("long")) {
 					if(kv[1].matches("[0-9]+")==false) {
-						throw new MyException("Óë¶¨ÒåÁĞµÄÊôĞÔ²»·û£¬Çë¼ì²é£¡");
+						throw new MyException("ä¸å®šä¹‰åˆ—çš„å±æ€§ä¸ç¬¦ï¼Œè¯·æ£€æŸ¥ï¼");
 					} else {
 						///code
 						Set s = t.getMp().keySet();
@@ -343,7 +357,7 @@ public class Checker {
 				}
 				else	if(t.getMp().get(kv[0]).equals("double")) {
 					if(kv[1].matches("[a-zA-Z_]+")==true) {
-						throw new MyException("Óë¶¨ÒåÁĞµÄÊôĞÔ²»·û£¬Çë¼ì²é£¡");
+						throw new MyException("ä¸å®šä¹‰åˆ—çš„å±æ€§ä¸ç¬¦ï¼Œè¯·æ£€æŸ¥ï¼");
 					} else {
 						///code
 						Set s = t.getMp().keySet();
@@ -365,7 +379,7 @@ public class Checker {
 				}
 				else	if(t.getMp().get(kv[0]).equals("float")) {
 					if(kv[1].matches("[a-zA-Z_]+")==true) {
-						throw new MyException("Óë¶¨ÒåÁĞµÄÊôĞÔ²»·û£¬Çë¼ì²é£¡");
+						throw new MyException("ä¸å®šä¹‰åˆ—çš„å±æ€§ä¸ç¬¦ï¼Œè¯·æ£€æŸ¥ï¼");
 					} else {
 						///code
 						Set s = t.getMp().keySet();
@@ -387,7 +401,7 @@ public class Checker {
 				}
 				else {
 					if(!(kv[1].charAt(0)=='\''&&kv[1].charAt(kv[1].length()-1)=='\'')){
-						throw new MyException("Óë¶¨ÒåÁĞµÄÊôĞÔ²»·û£¬Çë¼ì²é£¡");
+						throw new MyException("ä¸å®šä¹‰åˆ—çš„å±æ€§ä¸ç¬¦ï¼Œè¯·æ£€æŸ¥ï¼");
 					} else {
 						kv[1]=kv[1].replace("'", "");
 						//code
@@ -400,7 +414,7 @@ public class Checker {
 							String u = (String)k;
 							if(u.equals(kv[0])) {
 								if(a[de]==1) {
-									throw new MyException("½âÎö´íÎó£¡");
+									throw new MyException("è§£æé”™è¯¯ï¼");
 								}
 								a[de]=1;
 								ans.add(kv[1]);
@@ -456,20 +470,20 @@ public class Checker {
 
 		}
 
-		System.out.println(num+" Ìõ¼ÇÂ¼É¾³ı³É¹¦£¡");
+		System.out.println(num+" æ¡è®°å½•åˆ é™¤æˆåŠŸï¼");
 		return true;
 	}
 	public boolean checkSelect() throws MyException{
 		String[] w=comm.split("\\s");
 		if(w[0].trim().toLowerCase().equals("select")==false) {
-			throw new MyException("½âÎö´íÎó£¬Çë¼ì²é£¡");
+			throw new MyException("è§£æé”™è¯¯ï¼Œè¯·æ£€æŸ¥ï¼");
 		}
 		if(w[1].trim().equals("*")){
 			if(w[2].trim().equals("from")==false) {
-				throw new MyException("½âÎö´íÎó£¬Çë¼ì²é£¡");
+				throw new MyException("è§£æé”™è¯¯ï¼Œè¯·æ£€æŸ¥ï¼");
 			}
 			if(Tools.readTables().getTables().contains(new Table(w[3].trim()))==false) {
-				throw new MyException("±í²»´æÔÚ£¬Çë¼ì²é£¡");
+				throw new MyException("è¡¨ä¸å­˜åœ¨ï¼Œè¯·æ£€æŸ¥ï¼");
 			}
 
 			Table tb = null;
@@ -501,13 +515,13 @@ public class Checker {
 		} else {
 			String[] cls = comm.split("from");
 			if(cls.length<2) {
-				throw new MyException("½âÎö´íÎó£¬È±Ê§from£¡");
+				throw new MyException("è§£æé”™è¯¯ï¼Œç¼ºå¤±fromï¼");
 			}
 
 			String tnm = cls[1].trim().split("\\s")[0].trim();
 			Tables ts = Tools.readTables();
 			if(ts.getTables().contains(new Table(tnm))==false) {
-				throw new MyException("±í²»´æÔÚ£¡");
+				throw new MyException("è¡¨ä¸å­˜åœ¨ï¼");
 			}
 			Table t = new Table();
 			cls[0] = cls[0].substring(7).trim();
@@ -521,7 +535,7 @@ public class Checker {
 			for(int i=0;i<p.length;i++) {
 				if(t.getMp().get(p[i].trim())==null) {
 					System.out.print(p[i].trim());
-					throw new MyException(":ÁĞÃû²»´æÔÚ£¬Çë¼ì²é£¡");
+					throw new MyException(":åˆ—åä¸å­˜åœ¨ï¼Œè¯·æ£€æŸ¥ï¼");
 				}
 			}
 			Set<?> s = t.getMp().keySet();
@@ -563,7 +577,7 @@ public class Checker {
 		String[] w=comm.split("\\s");
 		if(w[0].trim().toLowerCase().equals("update")==false)
 		{
-			throw new MyException("½âÎö´íÎó£¬Çë¼ì²é£¡");
+			throw new MyException("è§£æé”™è¯¯ï¼Œè¯·æ£€æŸ¥ï¼");
 		}
 
 		Table tb = null;
@@ -575,9 +589,9 @@ public class Checker {
 		}
 		if(w[0].trim().toLowerCase().equals("set")==false)
 		{
-			throw new MyException("½âÎö´íÎó£¬Çë¼ì²é£¡");
+			throw new MyException("è§£æé”™è¯¯ï¼Œè¯·æ£€æŸ¥ï¼");
 		}
-
+		String[] tem=comm.split("set");
 
 		 
 		return false;
