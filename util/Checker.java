@@ -71,15 +71,50 @@ public class Checker {
 		for(int i=0;i<w.length;i++) {
 			String name = Tools.delSpaceEnter(w[i]).trim();
 			String[] c = name.split("\\s");
-			if(c.length!=2) {
+			if(c.length!=2||c.length!=4) {
 				throw new MyException("属性解析错误！");
-			}else {
+			}else if(c.length==4)
+			{
 				if(c[0].trim().matches("[a-zA-Z0-9_]+")==false||
 						(c[0].charAt(0)>='0'&&c[0].charAt(0)<='9')){
 					throw new MyException("属性名定义不合法");
 				} else {
-					if(c[1].trim().matches("int")) {
+					if(c[2].trim().toLowerCase().equals("not")&&c[3].trim().toLowerCase()equals("null"))
+					{
+						if(c[1].trim().matches("int")) {
+						table.getMp().put(c[0].trim(),"intnotnull");
+						} else if(c[1].trim().matches("double")) {
+						table.getMp().put(c[0].trim(),"doublenotnull");
+						} else if(c[1].trim().matches("long")) {
+						table.getMp().put(c[0].trim(),"longnotnull");
+						} else if(c[1].trim().matches("float")) {
+						table.getMp().put(c[0].trim(),"floatnotnull");}
+					
+						else if(c[1].trim().matches("string\\([0-9]+\\)")){
+						table.getMp().put(c[0].trim(), c[1].trim()+"notnull");
+					} 
+				}
+				
+			}else {
+				if(c[0].trim().matches("[a-zA-Z0-9_]+")==false||
+						(c[0].charAt(0)>='0'&&c[0].charAt(0)<='9')){
+					throw new MyException("属性名定义不合法");
+				}else if(c[0].trim().matches("primary"))
+				{
+					string a ="";
+					string ct=c[1].trim();
+					for(int i=4;i<c[1].trim().length;i++)
+					{
+						if (ct[i]==")")
+							break;
+						a+=ct[i];
+						
+					}
+					table.getMp().get(a)=table.getMp().get(a)+"notnull";
+				}					
+				else {
 						table.getMp().put(c[0].trim(),"int");
+					if(c[1].trim().matches("int")) {
 					} else if(c[1].trim().matches("double")) {
 						table.getMp().put(c[0].trim(),"double");
 					} else if(c[1].trim().matches("long")) {
@@ -121,10 +156,10 @@ public class Checker {
 			}
 
 			Tables tbs = Tools.readTables();
-			Table table = null;
+			Table t = null;
 			for (Table tb : tbs.getTables()) {
 				if(tb.getName().equals(name)) {
-					table = tb;
+					t = tb;
 					break ;
 				}
 			}
@@ -168,25 +203,46 @@ public class Checker {
 					throw new MyException("属性不存在，请检查！");
 				} else {
 					if(k.equals("int")) {
-						if(vals[i].trim().matches("[0-9]+")==false) {
+						if(vals[i].trim().matches("[0-9]+")==false&&vals[i].trim()!="") {
 							throw new MyException("插入的值与表定义的类型不一致！插入失败");
 						}else {
 							va.add(Integer.valueOf(vals[i]));
 						}
 					}else if(k.equals("long")) {
-						if(vals[i].trim().matches("[0-9]+")==false) {
+						if(vals[i].trim().matches("[0-9]+")==false&&vals[i].trim()!="") {
 							throw new MyException("插入的值与表定义的类型不一致！插入失败");
 						}else {
 							va.add(Long.valueOf(vals[i]));
 						}
 					}else if(k.equals("float")) {
+						if(vals[i].trim().matches("[a-zA-Z_]+")==true&&vals[i].trim()!="") {
+							throw new MyException("插入的值与表定义的类型不一致！插入失败");
+						}else {
+							va.add(Float.valueOf(vals[i]));
+						}
+					}else if(k.equals("double")) {
+						if(vals[i].trim().matches("[a-zA-Z_]+")==true&&vals[i].trim()!="") {
+							throw new MyException("插入的值与表定义的类型不一致！插入失败");
+						}else {
+							va.add(Double.valueOf(vals[i]));
+						}
+					}else if(k.equals("intnotnull")) {
+						if(vals[i].trim().matches("[0-9]+")==false) {
+							throw new MyException("插入的值与表定义的类型不一致！插入失败");
+						}else {
+							va.add(Integer.valueOf(vals[i]));
+					}else if(k.equals("longnotnull")) {
+						if(vals[i].trim().matches("[0-9]+")==false) {
+							throw new MyException("插入的值与表定义的类型不一致！插入失败");
+						}else {
+							va.add(Long.valueOf(vals[i]));
+					}else if(k.equals("floatnotnull")) {
 						if(vals[i].trim().matches("[a-zA-Z_]+")==true) {
 							throw new MyException("插入的值与表定义的类型不一致！插入失败");
 						}else {
 							va.add(Float.valueOf(vals[i]));
 						}
-					}
-					else if(k.equals("double")) {
+					}else if(k.equals("doublenotbull")) {
 						if(vals[i].trim().matches("[a-zA-Z_]+")==true) {
 							throw new MyException("插入的值与表定义的类型不一致！插入失败");
 						}else {
@@ -203,42 +259,7 @@ public class Checker {
 
 				}
 			}
-			Data dt = Tools.readData(name+".tb");
-			if(dt==null) {
-				dt = new Data();
-			}
-			List<Table> tbs2=Tools.readTables().getTables();
-			Table tbn = null;
-			for (Table tb2 : tbs2) {
-				if(tb2.getName().equals(name)) {
-					tbn = tb2;
-					break;
-				}
-			}
-
-			Set s = tbn.getMp().keySet();
-			Iterator i = s.iterator();
-
-			while(i.hasNext()){
-
-				Object k = i.next();
-				for(int j=0;j<cs.length;j++) {
-					if(cs[j].trim().equals((String)k)){
-						//						System.out.println("#");
-						if(va.get(j) instanceof String) {
-							String oi=(String)(va.get(j));
-							oi=oi.replace("'", "");
-							dt.getData().add(oi);
-						}
-						else 
-							dt.getData().add(va.get(j));
-						break;
-					}
-				}
-			}
-
-		
-			Tools.writeData(dt, name+".tb");
+			t.insert(va);
 			System.out.println("数据插入成功！");
 		} else {
 			throw new MyException("无法解析插入命令！");
@@ -316,42 +337,14 @@ public class Checker {
 					if(kv[1].matches("[0-9]+")==false) {
 						throw new MyException("与定义列的属性不符，请检查！");
 					} else {
-						///code
-						Set s = t.getMp().keySet();
-						Iterator it = s.iterator();
-						int de=0;
-
-						while(it.hasNext()){
-							Object k = it.next();
-							String u = (String)k;
-							if(u.equals(kv[0])) {
-								a[de]=1;
-								ans.add(kv[1]);
-								break;
-							}
-							de++;
-						}
+						t.del(kv[0],kv[1]);
 
 					}
 				} else	if(t.getMp().get(kv[0]).equals("long")) {
 					if(kv[1].matches("[0-9]+")==false) {
 						throw new MyException("与定义列的属性不符，请检查！");
 					} else {
-						///code
-						Set s = t.getMp().keySet();
-						Iterator it = s.iterator();
-						int de=0;
-
-						while(it.hasNext()){
-							Object k = it.next();
-							String u = (String)k;
-							if(u.equals(kv[0])) {
-								a[de]=1;
-								ans.add(kv[1]);
-								break;
-							}
-							de++;
-						}
+						t.del(kv[0],kv[1]);
 
 					}
 				}
@@ -359,21 +352,7 @@ public class Checker {
 					if(kv[1].matches("[a-zA-Z_]+")==true) {
 						throw new MyException("与定义列的属性不符，请检查！");
 					} else {
-						///code
-						Set s = t.getMp().keySet();
-						Iterator it = s.iterator();
-						int de=0;
-
-						while(it.hasNext()){
-							Object k = it.next();
-							String u = (String)k;
-							if(u.equals(kv[0])) {
-								a[de]=1;
-								ans.add(kv[1]);
-								break;
-							}
-							de++;
-						}
+						t.del(kv[0],kv[1]);
 
 					}
 				}
@@ -381,21 +360,7 @@ public class Checker {
 					if(kv[1].matches("[a-zA-Z_]+")==true) {
 						throw new MyException("与定义列的属性不符，请检查！");
 					} else {
-						///code
-						Set s = t.getMp().keySet();
-						Iterator it = s.iterator();
-						int de=0;
-
-						while(it.hasNext()){
-							Object k = it.next();
-							String u = (String)k;
-							if(u.equals(kv[0])) {
-								a[de]=1;
-								ans.add(kv[1]);
-								break;
-							}
-							de++;
-						}
+						t.del(kv[0],kv[1]);
 
 					}
 				}
@@ -405,76 +370,32 @@ public class Checker {
 					} else {
 						kv[1]=kv[1].replace("'", "");
 						//code
-						Set s = t.getMp().keySet();
-						Iterator it = s.iterator();
-						int de=0;
-
-						while(it.hasNext()){
-							Object k = it.next();
-							String u = (String)k;
-							if(u.equals(kv[0])) {
-								if(a[de]==1) {
-									throw new MyException("解析错误！");
-								}
-								a[de]=1;
-								ans.add(kv[1]);
-								break;
-							}
-							de++;
+						t.del(kv[0],kv[1]);
 						}
 					}
 
 				}
 			}
-			Data dt = Tools.readData(t.getName()+".tb");
-			int [] stack = new int[333];
-			int top=-1;
-			for(int i=0;i<dt.getData().size();i+=t.getMp().size()) {
-				int ind=0;
-				int ret=0;
-				for(int j=i;j<i+t.getMp().size();j++) {
-					if(a[j-i]==1) {
-						if(dt.getData().get(j) instanceof Integer ) {
-
-							if(((Integer)dt.getData().get(j)).equals(Integer.valueOf((String)ans.get(ind)))){
-								ret++;
-
-							}
-						}
-						if(dt.getData().get(j) instanceof String) {
-							if(((String)(dt.getData().get(j))).equals((String)ans.get(ind))){
-								ret++;
-							}
-						}
-						ind++;
-					}
-				}
-				if(ret==ans.size()){
-					stack[++top] = i/t.getMp().size();
-				}
-			}
-			int yu=0;
-		    num=(top+1);
-			for(int i=0;i<dt.getData().size();i+=t.getMp().size()) {
-				if(yu<=top&&stack[yu]==(int)(i/t.getMp().size())) {
-					for(int j=i;j<i+t.getMp().size();j++){
-						dt.getData().set(j, null);
-					}
-					yu++;
-				}
-			}
-		    List<Integer> nullArr = new ArrayList<Integer>();  
-			nullArr.add(null);  
-			dt.getData().removeAll(nullArr);
-			Tools.writeData(dt,t.getName()+".tb");
+			
 
 		}
 
-		System.out.println(num+" 条记录删除成功！");
+		System.out.println(" 删除成功！");
 		return true;
 	}
 	public boolean checkSelect() throws MyException{
 		String[] w=comm.split("\\s");
+	
+		int flag =0;
+		for(int i=0;i <w.length;i++)
+		{
+			if(w[i].trim().toLowerCase().equals("where"))
+			{
+				flag =1;
+				break;
+			}
+				
+		}
 		if(w[0].trim().toLowerCase().equals("select")==false) {
 			throw new MyException("解析错误，请检查！");
 		}
@@ -494,7 +415,7 @@ public class Checker {
 				}
 			}
 
-	
+			String[][] ans = t.selectAll();
 			Set<?> s = tb.getMp().keySet();
 			Iterator<?> ii = s.iterator();
 			System.out.println(w[3]+" : ");
@@ -503,16 +424,55 @@ public class Checker {
 				System.out.print(k+"     ");
 			}
 			System.out.println();
-			Data dt = Tools.readData(w[3].trim()+".tb");
-			int size=dt.getData().size();
-			for(int i=0;i<size;i++) {
-				System.out.print(dt.getData().get(i)+"   ");
-				if((i+1)%tb.getMp().size()==0&&i!=0) {
-					System.out.println();
+			for (int x = 0; x < ans.length; x++) {
+				for (int y = 0; y < ans[x].length; y++) {
+					System.out.print(ans[x][y] +"    ");
 				}
-			}
+				System.out.println("");
+			}		
+		} else if(flag ==1)
+		{
+			if(w[1].trim().equals("*"))
+			{
+					String[] cls = comm.split("from");
+				if(cls.length<2) {
+					throw new MyException("解析错误，缺失from！");
+				}
 
-		} else {
+				String tnm = cls[1].trim().split("\\s")[0].trim();
+				Tables ts = Tools.readTables();
+				if(ts.getTables().contains(new Table(tnm))==false) {
+					throw new MyException("表不存在！");
+				}
+				Table t = new Table();
+				cls[0] = cls[0].substring(7).trim();
+				String [] p = cls[0].split(","); 
+				for(int i=0;i<ts.getTables().size();i++) {
+					if(ts.getTables().get(i).getName().equals(tnm)) {
+						t = ts.getTables().get(i);
+						break;
+					}
+				}
+					String[] tem=comm.split("where");
+					String last=tem[1];//where conditon
+					String[] kv = last.split("=") 
+					String[][] ans = t.select(kv[0].trim,kv[1].trim)
+					Set<?> s = tb.getMp().keySet();
+					Iterator<?> ii = s.iterator();
+					System.out.println(w[3]+" : ");
+					while(ii.hasNext()){
+					Object k = ii.next();
+					System.out.print(k+"     ");
+				}	
+				System.out.println();
+				for (int x = 0; x < ans.length; x++) {
+					for (int y = 0; y < ans[x].length; y++) {
+						System.out.print(ans[x][y] +"    ");
+					}
+					System.out.println("");
+				}
+				return false
+			}
 			String[] cls = comm.split("from");
 			if(cls.length<2) {
 				throw new MyException("解析错误，缺失from！");
@@ -532,6 +492,60 @@ public class Checker {
 					break;
 				}
 			}
+			int nu=0
+			for(int i=0;i<p.length;i++) {
+				if(t.getMp().get(p[i].trim())==null) {
+					System.out.print(p[i].trim());
+					throw new MyException(":列名不存在，请检查！");
+				}
+				nu++;
+			}
+			String[] tem=comm.split("where");
+			String last=tem[1];//where conditon
+			String[] kv = last.split("=") 
+			String[][] ans =t.select(kv[0].trim,kv[1].trim)
+			int[] xi = new int[nu]
+			int a=0;
+			int b=0
+			for (String key : map.keySet()) {
+					if (key == p[b])
+					{
+						xi[b]=a;
+						b++;
+					}
+					a++;
+					if(b==nu)
+					 break;
+					
+				}
+			for (int x = 0; x < ans.length; x++) {
+				for (int y = 0; y < nu; y++) {
+					System.out.print(ans[x][xi[y]] +"    ");
+				}
+				System.out.println("");
+			}		
+		
+		}else {
+			String[] cls = comm.split("from");
+			if(cls.length<2) {
+				throw new MyException("解析错误，缺失from！");
+			}
+
+			String tnm = cls[1].trim().split("\\s")[0].trim();
+			Tables ts = Tools.readTables();
+			if(ts.getTables().contains(new Table(tnm))==false) {
+				throw new MyException("表不存在！");
+			}
+			Table t = new Table();
+			cls[0] = cls[0].substring(7).trim();
+			String [] p = cls[0].split(","); 
+			for(int i=0;i<ts.getTables().size();i++) {
+				if(ts.getTables().get(i).getName().equals(tnm)) {
+					t = ts.getTables().get(i);
+					break;
+				}
+			}
+			
 			for(int i=0;i<p.length;i++) {
 				if(t.getMp().get(p[i].trim())==null) {
 					System.out.print(p[i].trim());
@@ -542,6 +556,7 @@ public class Checker {
 			Iterator<?> ii = s.iterator();
 			System.out.println(tnm+" : ");
 			int[]  a = new int[22];
+			String
 			int ui=0;
 			while(ii.hasNext()){
 				Object k = ii.next();
@@ -554,17 +569,20 @@ public class Checker {
 				}
 				ui++;
 			}
+			String[][] ans = new String[ui][];
 			System.out.println("");
-			Data dt = Tools.readData(tnm.trim()+".tb");
-			int size=dt.getData().size();
-			for(int i=0;i<size;i++) {
-				if(a[i%t.getMp().size()]==1){
-					System.out.print(dt.getData().get(i)+"   ");
-				}
-				if((i+1)%t.getMp().size()==0&&i!=0) {
-					System.out.println();
-				}
+			for(int i=0;i<ui;i++)
+			{
+				string[i] =t.selectCol(p[i].trim()) 
 			}
+			for (int x = 0; x < ans[0].length; x++) {
+				for (int y = 0; y < ans.length; y++) {
+					System.out.print(ans[x][y] +"    ");
+				}
+				System.out.println("");
+			}	
+			
+			
 
 
 
@@ -591,11 +609,44 @@ public class Checker {
 		{
 			throw new MyException("解析错误，请检查！");
 		}
-		String[] tem=comm.split("set");
-
+		
+		String[] tem=comm.split("where");
+		String to =tem[0].split("set")[1];
+		String[] fi =to.split(",");//change
+		
+		String last=tem[1];//where conditon
+		String[] kv = last.split("=") 
+		for(int i=0;i<fi.length;i++)
+		{
+			String[] ch=fi[i].split("=");
+			t.update(kv[0].trim(),kv[1].trim(),ch[0].trim(),ch[1].trim());
+		}
 		 
 		return false;
 		
+	}
+	public boolean checkShow() throws MyException
+	{
+		Tables tbs = Tools.readTables();
+		String [] w = comm.split("\\s");
+		if(w[0].trim().toLowerCase().equals("show")==true||w[1].trim().toLowerCase().equals("table")==true||w.length==3)
+		{
+			if(tbs.getTables().contains(new Table(w[2].trim()))==false) {
+				throw new MyException("表名错误！请检查！~");
+			}
+			String name ="";
+			name = w[2].trim().toLowerCase();
+			Table ax = null;
+			for (Table tb : tbs.getTables()) {
+				if(tb.getName().equals(name)) {
+					ax = tb;
+					ax.show()//展示表信息，列名，列类型
+					break ;
+				}
+			}
+			
+		}
+		return false;
 	}
 
 	public String getComm() {
